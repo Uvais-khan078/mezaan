@@ -1,0 +1,32 @@
+# Built-in Android Studio ignores
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# AI and Tooling temporary files
+.artifacts/
+.kotlin/
+.android/
+*.artifact.md
+.idea/claudeCodeTabState.xml
+.idea/planningMode.xml
+
+# Build outputs
+*.apk
+*.aar
+*.bundle
+
+# Secrets
+local.properties
+google-services.json

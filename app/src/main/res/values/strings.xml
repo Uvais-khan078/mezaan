@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Meezan</string>
+
+    <!-- Error Messages -->
+    <string name="error_no_internet">No internet connection. Please check your network.</string>
+    <string name="error_api_failure">API Error (%1$d): %2$s</string>
+    <string name="error_location_permission_denied">Location permission is required to fetch prayer timings automatically.</string>
+    <string name="error_location_disabled">Location services are disabled on your device.</string>
+    <string name="error_notification_permission_denied">Notification permission is required for reminders.</string>
+    <string name="error_exact_alarm_permission_denied">Permission to schedule exact alarms is required for accurate reminders.</string>
+    <string name="error_database_failure">Database error occurred. Please try again.</string>
+    <string name="error_insufficient_funds">Insufficient funds. Available: ₹%1$.2f</string>
+    <string name="error_roadmap_parse_failure">Failed to parse roadmap: %1$s</string>
+    <string name="error_unknown">An unexpected error occurred. Please restart the app.</string>
+
+    <!-- Action Buttons -->
+    <string name="action_retry">Retry</string>
+    <string name="action_grant_permission">Grant Permission</string>
+    <string name="action_turn_on_location">Turn On Location</string>
+    <string name="action_enable_notifications">Enable Notifications</string>
+    <string name="action_allow_exact_alarms">Allow Exact Alarms</string>
+    <string name="action_edit_roadmap">Edit Roadmap</string>
+    <string name="action_dismiss">Dismiss</string>
+    <string name="action_ok">OK</string>
+
+    <!-- Notes -->
+    <string name="note_showing_cached_data">Note: Showing cached data.</string>
+</resources>

@@ -1,0 +1,48 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Professional Tarazu (Balance Scale) Logo for Meezan -->
+
+    <!-- Central Pillar -->
+    <path
+        android:fillColor="#6650a4"
+        android:pathData="M52,30h4v45h-4z" />
+
+    <!-- Base Base -->
+    <path
+        android:fillColor="#6650a4"
+        android:pathData="M44,75h20v4h-20z" />
+
+    <!-- Top Beam (Horizontal) -->
+    <path
+        android:fillColor="#6650a4"
+        android:pathData="M24,34h60v3h-60z" />
+
+    <!-- Left Scale (Bowl) -->
+    <path
+        android:fillColor="#6650a4"
+        android:pathData="M18,52c0,0 2,12 12,12s12,-12 12,-12z" />
+
+    <!-- Right Scale (Bowl) -->
+    <path
+        android:fillColor="#6650a4"
+        android:pathData="M66,52c0,0 2,12 12,12s12,-12 12,-12z" />
+
+    <!-- Left Hanger -->
+    <path
+        android:fillColor="#6650a4"
+        android:pathData="M30,37l-6,15h12z" />
+
+    <!-- Right Hanger -->
+    <path
+        android:fillColor="#6650a4"
+        android:pathData="M78,37l-6,15h12z" />
+
+    <!-- Top Cap (Modern touch) -->
+    <path
+        android:fillColor="#6650a4"
+        android:pathData="M51,26h6v4h-6z" />
+</vector>
