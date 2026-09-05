@@ -23,7 +23,6 @@
 .idea/planningMode.xml
 
 # Build outputs
-*.apk
 *.aar
 *.bundle
 
