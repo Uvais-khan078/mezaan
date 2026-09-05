@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The main Tarazu Icon: Made smaller to fit everything in the splash mask -->
+    <item
+        android:width="72dp"
+        android:height="72dp"
+        android:drawable="@drawable/ic_launcher_foreground"
+        android:gravity="center"
+        android:top="-12dp" />
+
+    <!-- Professional Handcrafted Watermark: "UVAIS KHAN" -->
+    <item
+        android:gravity="center"
+        android:top="36dp">
+        <vector
+            android:width="80dp"
+            android:height="15dp"
+            android:viewportWidth="120"
+            android:viewportHeight="20">
+
+            <!-- Letter U -->
+            <path android:fillColor="#3F51B5" android:pathData="M10,4 v8 q0,3 3,3 t3,-3 v-8 h2 v8 q0,5 -5,5 t-5,-5 v-8 z" />
+            <!-- Letter V -->
+            <path android:fillColor="#3F51B5" android:pathData="M22,4 l4,12 l4,-12 h2 l-5,15 h-2 l-5,-15 z" />
+            <!-- Letter A -->
+            <path android:fillColor="#3F51B5" android:pathData="M38,4 l5,15 h-2 l-1.5,-4 h-5 l-1.5,4 h-2 l5,-15 z M41,13 l-2,-6 l-2,6 z" />
+            <!-- Letter I -->
+            <path android:fillColor="#3F51B5" android:pathData="M48,4 h2 v15 h-2 z" />
+            <!-- Letter S -->
+            <path android:fillColor="#3F51B5" android:pathData="M54,16 q0,3 4,3 t4,-3 q0,-2 -4,-3 q-4,-1 -4,-4 q0,-3 4,-3 t4,3 h-2 q0,-1.5 -2,-1.5 t-2,1.5 q0,1 2,2 q4,1 4,4 q0,3 -4,3 t-4,-3 z" />
+
+            <!-- Space between names -->
+
+            <!-- Letter K -->
+            <path android:fillColor="#009688" android:pathData="M70,4 h2 v15 h-2 z M78,4 l-6,7.5 l6,7.5 h-2.5 l-5,-6.25 v6.25 h-2 v-15 h2 v6.25 l5,-6.25 z" />
+            <!-- Letter H -->
+            <path android:fillColor="#009688" android:pathData="M84,4 h2 v6 h6 v-6 h2 v15 h-2 v-7 h-6 v7 h-2 z" />
+            <!-- Letter A -->
+            <path android:fillColor="#009688" android:pathData="M102,4 l5,15 h-2 l-1.5,-4 h-5 l-1.5,4 h-2 l5,-15 z M105,13 l-2,-6 l-2,6 z" />
+            <!-- Letter N -->
+            <path android:fillColor="#1A1C1E" android:pathData="M112,4 h2 l6,10 v-10 h2 v15 h-2 l-6,-10 v10 h-2 z" />
+
+            <!-- Underline -->
+            <path android:fillColor="#DDE2E6" android:pathData="M10,19 h100 v0.5 h-100 z" />
+        </vector>
+    </item>
+</layer-list>

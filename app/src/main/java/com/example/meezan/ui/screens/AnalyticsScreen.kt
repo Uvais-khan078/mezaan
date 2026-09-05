@@ -174,6 +174,23 @@ fun AnalyticsScreen(
                 )
             }
 
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Meezan Insights v1.2.2",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                )
+                Text(
+                    text = "Designed & Developed by Uvais Khan",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
             Spacer(Modifier.height(32.dp))
         }
     }

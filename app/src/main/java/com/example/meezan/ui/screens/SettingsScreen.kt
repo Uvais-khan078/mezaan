@@ -285,7 +285,7 @@ fun SettingsScreen(
                             onClick = {
                                 val sendIntent: Intent = Intent().apply {
                                     action = Intent.ACTION_SEND
-                                    putExtra(Intent.EXTRA_TEXT, "Check out Meezan - The Balanced Productivity App!")
+                                    putExtra(Intent.EXTRA_TEXT, "Check out Meezan - The Balanced Productivity App! \n\nGitHub: https://github.com/Uvais-khan078/mezaan.git")
                                     type = "text/plain"
                                 }
                                 context.startActivity(Intent.createChooser(sendIntent, null))
@@ -317,12 +317,22 @@ fun SettingsScreen(
                     }
                 }
 
-                Text(
-                    text = "Meezan v1.2.0 (Premium Build)",
-                    style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Meezan v1.2.2 (Premium Build)",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    )
+                    Text(
+                        text = "Designed & Developed by Uvais Khan",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
 
             Spacer(Modifier.height(32.dp))
