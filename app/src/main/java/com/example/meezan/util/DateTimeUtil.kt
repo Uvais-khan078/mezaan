@@ -62,6 +62,13 @@ object DateTimeUtil {
     }
 
     /**
+     * Format epoch millis to short date (e.g., "05 Sep")
+     */
+    fun formatShortDate(millis: Long): String {
+        return SimpleDateFormat("dd MMM", Locale.getDefault()).format(java.util.Date(millis))
+    }
+
+    /**
      * Get today's date at midnight in milliseconds
      */
     fun getTodayAtMidnight(): Long {

@@ -24,15 +24,23 @@
 - **Privacy Gated**: Sensitive financial details are protected behind system **Biometric (Fingerprint/PIN)** authentication.
 
 ### 📊 Insights & Analytics
-- **Productivity Trends**: Visualize your performance over 7 or 30 days with integrated line charts.
-- **Spending Distribution**: Analyze your daily spending habits with column charts.
-- **Consistency Grids**: GitHub-style heatmaps to track your habit consistency over the last 5 weeks.
+- **Dynamic Charting**: Visualize your performance over 7 or 30 days with integrated line and column charts, now fully aligned with the calendar month.
+- **Spending Distribution**: Analyze your daily spending habits with detailed breakdown charts.
+- **Monthly Habit Grid**: A professional monthly calendar view with day numbers and "Today" highlighting to track consistency across every month.
 
 ### 🛡️ Security & Privacy
 - **Database Encryption**: All user data is secured with **SQLCipher** using 256-bit AES encryption.
 - **Secure Preferences**: Sensitive data like location and contact names are stored in `EncryptedSharedPreferences`.
+- **Biometric Lock**: Critical sections like Finance and Data Reset are protected by system **Biometric (Fingerprint/PIN)** authentication.
 - **Data Portability**: Full support for JSON-based **Backup and Restore**.
 - **Selective Reset**: A "Danger Zone" feature to clear all activity data while protecting your settings and prayer configurations. Includes an optional toggle to wipe or keep Finance records.
+
+---
+
+## 🎨 Professional UI
+- **Seamless Modern Design**: Header and Footer blend perfectly with the main content for an edge-to-edge, unified experience.
+- **High-Visibility Light Mode**: A custom-designed light theme with a "Deep Indigo & Soft Teal" palette for professional looks and high readability.
+- **Fluid Animations**: Smooth transitions and haptic feedback for a premium feel.
 
 ---
 

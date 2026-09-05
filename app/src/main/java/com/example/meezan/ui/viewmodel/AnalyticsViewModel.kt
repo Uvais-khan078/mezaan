@@ -51,8 +51,28 @@ class AnalyticsViewModel(
         _selectedRange.flatMapLatest { range ->
             val cal = Calendar.getInstance()
             val endDate = cal.timeInMillis
-            cal.add(Calendar.DAY_OF_YEAR, -range.days + 1)
-            val startDate = DateTimeUtil.normalizeToMidnight(cal.timeInMillis)
+            
+            val startDate = if (range == TimeRange.MONTH) {
+                // Align to the 1st of the current month
+                cal.apply {
+                    set(Calendar.DAY_OF_MONTH, 1)
+                }.timeInMillis.let { DateTimeUtil.normalizeToMidnight(it) }
+            } else {
+                // Align to the current week's Monday
+                cal.apply {
+                    set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+                    // If it's Sunday today, we might want this Monday or last Monday?
+                    // Standard practice is current week's Monday. 
+                    // If today is before Monday (Sun), Calendar might jump forward.
+                    if (timeInMillis > endDate) {
+                        add(Calendar.WEEK_OF_YEAR, -1)
+                    }
+                }.timeInMillis.let { DateTimeUtil.normalizeToMidnight(it) }
+            }
+
+            // Calculate exact number of days to display
+            val diffMillis = endDate - startDate
+            val daysToDisplay = (diffMillis / (24 * 60 * 60 * 1000) + 1).toInt().coerceAtLeast(1)
 
             combine(
                 scoreRepository.observeScoresInRange(startDate, endDate),
@@ -67,8 +87,30 @@ class AnalyticsViewModel(
                 val distribution = expenses.groupBy { it.sourceOrReason.lowercase() }
                     .mapValues { entry -> entry.value.sumOf { it.amount } }
 
-                val dailySpending = expenses.groupBy { DateTimeUtil.normalizeToMidnight(it.date) }
+                // PADDING LOGIC: Ensure every day has a data point
+                val paddedScores = mutableListOf<DailyScore>()
+                val paddedSpending = mutableMapOf<Long, Double>()
+                val dateLabels = mutableListOf<String>()
+                
+                val currentCal = Calendar.getInstance().apply { timeInMillis = startDate }
+                val scoreMap = scores.associateBy { it.date }
+                val spendingMap = expenses.groupBy { DateTimeUtil.normalizeToMidnight(it.date) }
                     .mapValues { entry -> entry.value.sumOf { it.amount } }
+
+                repeat(daysToDisplay) {
+                    val dateMillis = currentCal.timeInMillis
+                    
+                    // 1. Label
+                    dateLabels.add(DateTimeUtil.formatShortDate(dateMillis))
+                    
+                    // 2. Score (Pad with 0 if missing)
+                    paddedScores.add(scoreMap[dateMillis] ?: DailyScore(dateMillis))
+                    
+                    // 3. Spending (Pad with 0 if missing)
+                    paddedSpending[dateMillis] = spendingMap[dateMillis] ?: 0.0
+                    
+                    currentCal.add(Calendar.DAY_OF_YEAR, 1)
+                }
 
                 val avgScore = if (scores.isEmpty()) 0f else {
                     scores.asSequence().map { it.overallScore }.average().toFloat()
@@ -77,10 +119,11 @@ class AnalyticsViewModel(
                 val bestDay = scores.maxByOrNull { it.overallScore }?.date
 
                 AnalyticsUiState(
-                    scoreHistory = scores,
+                    scoreHistory = paddedScores,
                     expenseDistribution = distribution,
-                    dailySpending = dailySpending,
+                    dailySpending = paddedSpending,
                     habitHistory = habitLogs,
+                    dateLabels = dateLabels,
                     averageScore = avgScore,
                     topCategory = topCategory,
                     bestDay = bestDay
@@ -114,6 +157,7 @@ data class AnalyticsUiState(
     val expenseDistribution: Map<String, Double> = emptyMap(),
     val dailySpending: Map<Long, Double> = emptyMap(),
     val habitHistory: List<HabitLog> = emptyList(),
+    val dateLabels: List<String> = emptyList(),
     val averageScore: Float = 0f,
     val topCategory: String? = null,
     val bestDay: Long? = null

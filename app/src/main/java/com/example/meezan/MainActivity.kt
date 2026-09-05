@@ -163,7 +163,10 @@ class MainActivity : FragmentActivity() {
                 Scaffold(
                     bottomBar = {
                         if (currentScreen == "main" && !showSettings) {
-                            NavigationBar {
+                            NavigationBar(
+                                containerColor = MaterialTheme.colorScheme.background,
+                                tonalElevation = 0.dp
+                            ) {
                                 MeezanTab.entries.forEach { tab ->
                                     NavigationBarItem(
                                         selected = currentTab == tab,

@@ -1,6 +1,8 @@
 package com.example.meezan.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -13,11 +15,14 @@ import androidx.compose.runtime.*
 import com.example.meezan.util.Constants
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.meezan.MeezanApplication
@@ -28,6 +33,7 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
+import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import java.util.Calendar
@@ -109,11 +115,17 @@ fun AnalyticsScreen(
             Text("Productivity Trend", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             if (state.scoreHistory.size >= 2) {
                 val entries = remember(state.scoreHistory) { state.scoreHistory.map { it.overallScore } }
+                val labelColor = MaterialTheme.colorScheme.onSurface
                 Chart(
-                    chart = lineChart(lines = listOf(com.patrykandpatrick.vico.core.chart.line.LineChart.LineSpec(lineColor = MaterialTheme.colorScheme.primary.toArgb()))),
+                    chart = lineChart(lines = listOf(com.patrykandpatrick.vico.core.chart.line.LineChart.LineSpec(lineColor = MaterialTheme.colorScheme.primary.toArgb(), lineThicknessDp = 3f))),
                     model = entryModelOf(*entries.toTypedArray()),
-                    startAxis = rememberStartAxis(),
-                    bottomAxis = rememberBottomAxis(),
+                    startAxis = rememberStartAxis(
+                        label = com.patrykandpatrick.vico.compose.component.textComponent(color = labelColor)
+                    ),
+                    bottomAxis = rememberBottomAxis(
+                        valueFormatter = { value, _ -> state.dateLabels.getOrNull(value.toInt()) ?: "" },
+                        label = com.patrykandpatrick.vico.compose.component.textComponent(color = labelColor)
+                    ),
                     modifier = Modifier.fillMaxWidth().height(200.dp),
                 )
             } else {
@@ -124,17 +136,23 @@ fun AnalyticsScreen(
                 )
             }
 
-            // 4. Spending Column Chart
+            // 4. Daily Spending Chart
             Text("Daily Spending", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             if (state.dailySpending.isNotEmpty()) {
                 val sorted = remember(state.dailySpending) {
                     state.dailySpending.toList().sortedBy { it.first }.map { it.second }
                 }
+                val labelColor = MaterialTheme.colorScheme.onSurface
                 Chart(
                     chart = columnChart(),
                     model = entryModelOf(*sorted.toTypedArray()),
-                    startAxis = rememberStartAxis(),
-                    bottomAxis = rememberBottomAxis(),
+                    startAxis = rememberStartAxis(
+                        label = com.patrykandpatrick.vico.compose.component.textComponent(color = labelColor)
+                    ),
+                    bottomAxis = rememberBottomAxis(
+                        valueFormatter = { value, _ -> state.dateLabels.getOrNull(value.toInt()) ?: "" },
+                        label = com.patrykandpatrick.vico.compose.component.textComponent(color = labelColor)
+                    ),
                     modifier = Modifier.fillMaxWidth().height(200.dp),
                 )
             } else {
@@ -163,11 +181,14 @@ fun AnalyticsScreen(
 
 @Composable
 fun AnalyticsSummaryCard(label: String, value: String, icon: androidx.compose.ui.graphics.vector.ImageVector, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
+    Card(
+        modifier = modifier,
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+    ) {
         Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(icon, null, Modifier.size(20.dp), tint = MaterialTheme.colorScheme.primary)
-            Text(label, style = MaterialTheme.typography.labelSmall)
-            Text(value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, maxLines = 1)
+            Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, maxLines = 1, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
@@ -185,37 +206,86 @@ fun HabitHeatmap(logs: List<com.example.meezan.data.entities.HabitLog>) {
 
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
-            val cal = Calendar.getInstance()
-            cal.add(Calendar.DAY_OF_YEAR, -34)
+            val now = Calendar.getInstance()
+            
+            // Start from the 1st of the CURRENT month
+            val cal = Calendar.getInstance().apply {
+                set(Calendar.DAY_OF_MONTH, 1)
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
             
             val monthLabel = java.text.SimpleDateFormat("MMMM yyyy", java.util.Locale.getDefault()).format(cal.time)
-            Text(monthLabel, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
-            Spacer(Modifier.height(8.dp))
+            Text(monthLabel, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(12.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                (0 until Constants.Analytics.HEATMAP_WEEKS).forEach { _ ->
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        repeat(Constants.Analytics.DAYS_IN_WEEK) {
-                            val currentDay = cal.get(Calendar.DAY_OF_YEAR)
-                            val currentYear = cal.get(Calendar.YEAR)
-                            val dayLogs = logsByDate[currentDay to currentYear] ?: emptyList()
-                            val intensity = if (dayLogs.isEmpty()) 0f else dayLogs.count { it.completed }.toFloat() / dayLogs.size.toFloat()
-                            Box(
-                                Modifier
-                                    .size(18.dp)
-                                    .background(
-                                        color = if (intensity == 0f) MaterialTheme.colorScheme.surfaceVariant 
-                                                else MaterialTheme.colorScheme.primary.copy(alpha = intensity.coerceAtLeast(0.2f)), 
-                                        shape = MaterialTheme.shapes.extraSmall
-                                    )
-                            )
-                            cal.add(Calendar.DAY_OF_YEAR, 1)
+            // Weekday Headers
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                listOf("S", "M", "T", "W", "T", "F", "S").forEach { day ->
+                    Text(day, style = MaterialTheme.typography.labelSmall, modifier = Modifier.width(32.dp), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                }
+            }
+            
+            Spacer(Modifier.height(4.dp))
+
+            val firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK) - 1 // 0 (Sun) to 6 (Sat)
+            val daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+            
+            // Grid of days
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                var dayCounter = 1
+                // Up to 6 weeks in a month view
+                repeat(6) { weekIndex ->
+                    if (dayCounter <= daysInMonth) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            repeat(7) { dayOfWeekIndex ->
+                                val isValidDay = (weekIndex > 0 || dayOfWeekIndex >= firstDayOfWeek) && (dayCounter <= daysInMonth)
+                                
+                                if (isValidDay) {
+                                    val currentDayOfYear = cal.get(Calendar.DAY_OF_YEAR)
+                                    val currentYear = cal.get(Calendar.YEAR)
+                                    
+                                    val dayLogs = logsByDate[currentDayOfYear to currentYear] ?: emptyList()
+                                    val intensity = if (dayLogs.isEmpty()) 0f else dayLogs.count { it.completed }.toFloat() / dayLogs.size.toFloat()
+                                    val isToday = currentDayOfYear == now.get(Calendar.DAY_OF_YEAR) && currentYear == now.get(Calendar.YEAR)
+
+                                    Box(
+                                        Modifier
+                                            .size(32.dp)
+                                            .background(
+                                                color = if (intensity == 0f) MaterialTheme.colorScheme.surfaceVariant 
+                                                        else MaterialTheme.colorScheme.primary.copy(alpha = intensity.coerceAtLeast(0.2f)), 
+                                                shape = MaterialTheme.shapes.small
+                                            )
+                                            .border(
+                                                width = if (isToday) 2.dp else 0.dp,
+                                                color = if (isToday) MaterialTheme.colorScheme.primary else Color.Transparent,
+                                                shape = MaterialTheme.shapes.small
+                                            ),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            text = dayCounter.toString(),
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = if (isToday) FontWeight.ExtraBold else FontWeight.Normal,
+                                            color = if (intensity > 0.5f) Color.White else MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
+                                    dayCounter++
+                                    cal.add(Calendar.DAY_OF_MONTH, 1)
+                                } else {
+                                    Spacer(Modifier.size(32.dp))
+                                }
+                            }
                         }
                     }
                 }
             }
-            Spacer(Modifier.height(8.dp))
-            Text("Consistency grid (last 5 weeks)", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            
+            Spacer(Modifier.height(12.dp))
+            Text("Monthly progress based on habit logs", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
         }
     }
 }
